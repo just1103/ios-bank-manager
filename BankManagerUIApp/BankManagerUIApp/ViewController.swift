@@ -1,6 +1,7 @@
 import UIKit
 
 class ViewController: UIViewController {
+    let timerLabel = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,10 +27,17 @@ class ViewController: UIViewController {
         horizontalStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
 //        horizontalStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
         horizontalStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        
+        
+        let timeInterval: Double = 0.001
+        var standardTime = CFAbsoluteTimeGetCurrent()
+        Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
     }
-    
-    
 
-
+    @objc func updateTime(to time: CFAbsoluteTime) {
+        let timeNow = CFAbsoluteTimeGetCurrent()
+        timerLabel.text = String(time - timeNow)
+        
+    }
 }
 
