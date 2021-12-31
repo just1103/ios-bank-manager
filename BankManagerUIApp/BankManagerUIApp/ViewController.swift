@@ -2,13 +2,23 @@ import UIKit
 
 class ViewController: UIViewController {
     let timerLabel = UILabel()
+    
+    var initialTime: Double = 0.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let mainVerticalStackView = UIStackView()
+        mainVerticalStackView.spacing = 10
+        mainVerticalStackView.axis = .vertical
+        mainVerticalStackView.alignment = .center
+        mainVerticalStackView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(mainVerticalStackView)
+        
         let horizontalStackView: UIStackView = UIStackView()
         horizontalStackView.axis = .horizontal
         horizontalStackView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(horizontalStackView)
+        mainVerticalStackView.addArrangedSubview(horizontalStackView)
         
         let addCustomerButton = UIButton()
         addCustomerButton.setTitle("고객 10명 추가", for: .normal)
@@ -28,16 +38,67 @@ class ViewController: UIViewController {
 //        horizontalStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
         horizontalStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
         
-        
         let timeInterval: Double = 0.001
-        var standardTime = CFAbsoluteTimeGetCurrent()
-        Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
-    }
 
-    @objc func updateTime(to time: CFAbsoluteTime) {
-        let timeNow = CFAbsoluteTimeGetCurrent()
-        timerLabel.text = String(time - timeNow)
+        let timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
         
+        timerLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(timerLabel)
+        
+        mainVerticalStackView.addArrangedSubview(timerLabel)
+        
+        let waitingLabel = UILabel()
+        waitingLabel.backgroundColor = .green
+        waitingLabel.text = "대기중"
+        waitingLabel.textColor = .white
+        waitingLabel.textAlignment = .center
+        waitingLabel.font = .preferredFont(forTextStyle: .largeTitle)
+        waitingLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let handlingTaskLabel = UILabel()
+        handlingTaskLabel.backgroundColor = .blue
+        handlingTaskLabel.text = "업무중"
+        handlingTaskLabel.textColor = .white
+        handlingTaskLabel.textAlignment = .center
+        handlingTaskLabel.font = .preferredFont(forTextStyle: .largeTitle)
+        handlingTaskLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let horizontalStackView2 = UIStackView()
+        horizontalStackView2.translatesAutoresizingMaskIntoConstraints = false
+        horizontalStackView2.axis = .horizontal
+        horizontalStackView2.distribution = .fillEqually
+        horizontalStackView2.addArrangedSubview(waitingLabel)
+        horizontalStackView2.addArrangedSubview(handlingTaskLabel)
+        mainVerticalStackView.addArrangedSubview(horizontalStackView2)
+        horizontalStackView2.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+        horizontalStackView2.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+       
+    }
+    
+    @objc func updateTime() {
+        initialTime += 0.001
+        timerLabel.text = "업무시간 - \(initialTime.minuteSecondMS)"
+    }
+}
+
+extension Double {
+    var hourMinuteSecondMS: String {
+        String(format:"%d:%02d:%02d:%03d", hour, minute, second, millisecond)
+    }
+    var minuteSecondMS: String {
+        String(format:"%d:%02d:%03d", minute, second, millisecond)
+    }
+    var hour: Int {
+        Int((self/3600).truncatingRemainder(dividingBy: 3600))
+    }
+    var minute: Int {
+        Int((self/60).truncatingRemainder(dividingBy: 60))
+    }
+    var second: Int {
+        Int(truncatingRemainder(dividingBy: 60))
+    }
+    var millisecond: Int {
+        Int((self*1000).truncatingRemainder(dividingBy: 1000))
     }
 }
 
