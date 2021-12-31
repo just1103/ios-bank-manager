@@ -74,7 +74,7 @@ struct Bank {
     private func workOnTask(of customer: Customer) {
         notifyStartingTask(of: customer)
         Thread.sleep(forTimeInterval: customer.bankTask.taskHandlingTime)
-        notifyFinisingTask(of: customer)
+//        notifyFinisingTask(of: customer)
         
         switch customer.bankTask {
         case .deposit:
@@ -84,15 +84,16 @@ struct Bank {
         }
     }
     
-    private func notifyStartingTask(of customer: Customer) {
-        print("\(customer.number)번 고객 \(customer.bankTask.description)업무 시작")
+    private func notifyStartingTask(of customer: Customer) -> String{
+        return "\(customer.number) - \(customer.bankTask.description)"
     }
     
-    private func notifyFinisingTask(of customer: Customer) {
-        print("\(customer.number)번 고객 \(customer.bankTask.description)업무 완료")
-    }
+//    private func notifyFinisingTask(of customer: Customer) {
+//        print("\(customer.number)번 고객 \(customer.bankTask.description)업무 완료")
+//    }
     
     private func notifyBankClosing(with totalTime: String) {
         print("업무가 마감되었습니다. 오늘 업무를 처리한 고객은 총 \(numberOfCustomer)명이며, 총 업무시간은 \(totalTime)초 입니다.")
     }
+
 }

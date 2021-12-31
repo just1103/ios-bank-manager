@@ -2,7 +2,7 @@ import UIKit
 
 class ViewController: UIViewController {
     let timerLabel = UILabel()
-    
+    let bankStartButton = BankingProgramHandler()
     var initialTime: Double = 0.0
 
     override func viewDidLoad() {
@@ -72,12 +72,34 @@ class ViewController: UIViewController {
         mainVerticalStackView.addArrangedSubview(horizontalStackView2)
         horizontalStackView2.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         horizontalStackView2.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-       
+        
+        let stackViewWithWatingCustomer = UIStackView()
+        stackViewWithWatingCustomer.axis = .vertical
+        stackViewWithWatingCustomer.alignment = .center
+        stackViewWithWatingCustomer.backgroundColor = .white
+        
+        let stackViewWithExitCustomer = UIStackView()
+        stackViewWithExitCustomer.axis = .vertical
+        stackViewWithExitCustomer.alignment = .center
+        stackViewWithExitCustomer.backgroundColor = .white
+        
+        let stackViewForAllCustomers = UIStackView()
+        stackViewForAllCustomers.axis = .horizontal
+        stackViewForAllCustomers.addArrangedSubview(stackViewWithWatingCustomer)
+        stackViewForAllCustomers.addArrangedSubview(stackViewWithExitCustomer)
+        stackViewForAllCustomers.distribution = .fillEqually
+        mainVerticalStackView.addArrangedSubview(stackViewForAllCustomers)
+        
+        
     }
     
     @objc func updateTime() {
         initialTime += 0.001
         timerLabel.text = "업무시간 - \(initialTime.minuteSecondMS)"
+    }
+    
+    func addAllCustomer() {
+        
     }
 }
 
